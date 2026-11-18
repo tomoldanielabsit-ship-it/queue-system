@@ -75,7 +75,7 @@ def parse_booking_date(value):
 
 
 def send_confirmation(appointment):
-    host = os.environ.get("SMTP_HOST")
+    host = os.environ.get("PLMUN_SMTP_HOST")
     if not host:
         logging.info(
             "Email not configured; development confirmation for %s",
@@ -85,7 +85,7 @@ def send_confirmation(appointment):
 
     message = EmailMessage()
     message["Subject"] = "Your service appointment " + appointment["ticket"]
-    message["From"] = os.environ.get("SMTP_FROM", os.environ.get("SMTP_USER", ""))
+    message["From"] = os.environ.get("PLMUN_SMTP_FROM", os.environ.get("PLMUN_SMTP_USER", ""))
     message["To"] = appointment["email"]
     message.set_content(
         "Hello %s,\n\nYour service appointment is confirmed.\n"
@@ -99,11 +99,11 @@ def send_confirmation(appointment):
         )
     )
     try:
-        port = int(os.environ.get("SMTP_PORT", "587"))
+        port = int(os.environ.get("PLMUN_SMTP_PORT", "587"))
         with smtplib.SMTP(host, port, timeout=15) as smtp:
             smtp.starttls()
-            username = os.environ.get("SMTP_USER")
-            password = os.environ.get("SMTP_PASSWORD")
+            username = os.environ.get("PLMUN_SMTP_USER")
+            password = os.environ.get("PLMUN_SMTP_PASSWORD")
             if username:
                 smtp.login(username, password or "")
             smtp.send_message(message)
