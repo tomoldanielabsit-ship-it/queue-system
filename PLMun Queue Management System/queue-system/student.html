@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Book and track a PLMun Registrar appointment">
+  <title>Student Appointment Portal | PLMun</title>
+  <link rel="stylesheet" href="style.css?v=2026-11-17-tracking-codes">
+</head>
+<body class="student-page student-auth-mode">
+  <header class="student-header">
+    <img src="images/plmun-logo.jpg" alt="PLMun Logo">
+    <div>
+      <h1>Registrar Appointment Portal</h1>
+      <p>Pamantasan ng Lungsod ng Muntinlupa</p>
+    </div>
+    <a class="staff-link" href="login.html">Staff sign in</a>
+  </header>
+
+  <main class="student-main">
+    <section id="studentAuthPanel" class="student-panel">
+      <div id="studentLoginView">
+        <h2>Student sign in</h2>
+        <p class="section-help">Sign in with your PLMun institutional email address ending in @plmun.edu.ph to book and track appointments.</p>
+        <form id="studentLoginForm">
+          <label for="studentLoginEmail">Institutional email</label>
+          <input type="email" id="studentLoginEmail" maxlength="254" autocomplete="username" required>
+          <label for="studentLoginPassword">Password</label>
+          <input type="password" id="studentLoginPassword" autocomplete="current-password" required>
+          <button class="btn-confirm" type="submit">Sign in</button>
+        </form>
+        <button id="showRegisterButton" class="student-text-button" type="button">Don't have an account? Register</button>
+      </div>
+      <div id="studentRegisterView" hidden>
+        <h2>Create a student account</h2>
+        <p class="section-help">Use your PLMun institutional email address ending in @plmun.edu.ph. Your password must be at least 12 characters long.</p>
+        <p class="privacy-note">Email verification is not currently enabled; registration only checks the email domain.</p>
+        <form id="studentRegisterForm">
+          <label for="studentRegisterName">Full name</label>
+          <input type="text" id="studentRegisterName" maxlength="120" autocomplete="name" required>
+          <label for="studentRegisterEmail">Institutional email</label>
+          <input type="email" id="studentRegisterEmail" maxlength="254" autocomplete="email" required>
+          <label for="studentRegisterPassword">Password (minimum 12 characters)</label>
+          <input type="password" id="studentRegisterPassword" minlength="12" maxlength="1024" autocomplete="new-password" required>
+          <label for="studentRegisterPasswordConfirmation">Confirm password</label>
+          <input type="password" id="studentRegisterPasswordConfirmation" minlength="12" maxlength="1024" autocomplete="new-password" required>
+          <button class="btn-confirm" type="submit">Create account</button>
+        </form>
+        <button id="showLoginButton" class="student-text-button" type="button">Already have an account? Sign in</button>
+      </div>
+      <p id="studentAuthMessage" class="message" role="alert" hidden></p>
+    </section>
+
+    <div id="studentPortal" hidden>
+    <div class="student-account-bar">
+      <p>Signed in as <strong id="studentAccountName"></strong> (<span id="studentAccountEmail"></span>)</p>
+      <button id="studentLogoutButton" class="btn-cancel" type="button">Sign out</button>
+    </div>
+    <nav class="student-tabs" aria-label="Student services">
+      <button type="button" class="student-tab active" data-panel="bookingPanel">Book appointment</button>
+      <button type="button" class="student-tab" data-panel="trackingPanel">Track / manage appointment</button>
+    </nav>
+
+    <section id="bookingPanel" class="student-panel">
+      <h2 id="studentBookingTitle">Book a Registrar appointment</h2>
+      <p id="studentBookingHelp" class="section-help">Select a green date with open appointment slots. Red dates have reached the daily limit or are holidays; gray dates are past, weekends, or outside the booking window.</p>
+      <p id="rescheduleModeMessage" class="message" role="status" hidden></p>
+      <form id="studentBookingForm">
+        <div class="student-form-grid">
+          <div>
+            <div class="student-calendar" role="group" aria-labelledby="studentCalendarLabel">
+              <h3 id="studentCalendarLabel">Appointment date</h3>
+              <div class="student-calendar-navigation">
+                <button id="studentCalendarPrevious" class="calendar-nav-button" type="button" aria-label="Previous month">‹</button>
+                <strong id="studentCalendarMonth" aria-live="polite"></strong>
+                <button id="studentCalendarNext" class="calendar-nav-button" type="button" aria-label="Next month">›</button>
+              </div>
+              <div class="student-calendar-weekdays" aria-hidden="true">
+                <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span>
+                <span>Thu</span><span>Fri</span><span>Sat</span>
+              </div>
+              <div id="studentCalendarDays" class="student-calendar-days"></div>
+              <div class="student-calendar-legend" aria-label="Calendar availability legend">
+                <span><i class="legend-dot available"></i>Available</span>
+                <span><i class="legend-dot unavailable"></i>Unavailable / Holiday</span>
+                <span><i class="legend-dot closed"></i>Closed</span>
+              </div>
+            </div>
+            <input type="hidden" id="studentDate">
+            <p id="studentDateStatus" class="schedule-status" role="status" aria-live="polite" hidden></p>
+          </div>
+          <div>
+            <fieldset id="studentServiceOptions" class="service-selection" aria-describedby="studentServiceHelp">
+              <legend>Service / document</legend>
+              <p id="studentServiceHelp" class="service-selection-help">Select all services/documents you need.</p>
+              <div class="service-groups">
+                <fieldset class="service-group">
+                  <legend>1) Certificates</legend>
+                  <label class="service-option"><input type="checkbox" name="studentService" value="Certificate of Grades (COG)"><span>Certificate of Grades (COG)</span></label>
+                  <label class="service-option"><input type="checkbox" name="studentService" value="Certificate of Enrollment (COE)"><span>Certificate of Enrollment (COE)</span></label>
+                  <label class="service-option"><input type="checkbox" name="studentService" value="Certificate of Graduation"><span>Certificate of Graduation</span></label>
+                  <label class="service-option"><input type="checkbox" name="studentService" value="Certificate of Earned Units"><span>Certificate of Earned Units</span></label>
+                  <label class="service-option"><input type="checkbox" name="studentService" value="CHED Endorsement"><span>CHED Endorsement</span></label>
+                  <label class="service-option"><input type="checkbox" name="studentService" value="Certificate of Incumbent"><span>Certificate of Incumbent</span></label>
+                  <label class="service-option"><input type="checkbox" name="studentService" value="GWA Certificate"><span>GWA Certificate</span></label>
+                  <label class="service-option"><input type="checkbox" name="studentService" value="CAV/S.O. Certificate"><span>CAV/S.O. Certificate</span></label>
+                  <label class="service-option"><input type="checkbox" name="studentService" value="Certificate for Medium of Instruction"><span>Certificate for Medium of Instruction</span></label>
+                </fieldset>
+                <fieldset class="service-group">
+                  <legend>2) Authentication</legend>
+                  <label class="service-option"><input type="checkbox" name="studentService" value="Authentication"><span>Authentication</span></label>
+                  <label class="service-option"><input type="checkbox" name="studentService" value="COPC Authentication"><span>COPC Authentication</span></label>
+                </fieldset>
+                <fieldset class="service-group">
+                  <legend>3) Forms</legend>
+                  <label class="service-option"><input type="checkbox" name="studentService" value="Evaluation Form"><span>Evaluation Form</span></label>
+                  <label class="service-option"><input type="checkbox" name="studentService" value="Subject Credit"><span>Subject Credit</span></label>
+                  <label class="service-option"><input type="checkbox" name="studentService" value="Shifting Form"><span>Shifting Form</span></label>
+                  <label class="service-option"><input type="checkbox" name="studentService" value="Completion Form"><span>Completion Form</span></label>
+                  <label class="service-option"><input type="checkbox" name="studentService" value="AW/Adding/Dropping Form"><span>AW/Adding/Dropping Form</span></label>
+                </fieldset>
+                <fieldset class="service-group">
+                  <legend>4) Others</legend>
+                  <label class="service-option"><input type="checkbox" name="studentService" value="COM Reprint"><span>COM Reprint</span></label>
+                  <label class="service-option"><input type="checkbox" name="studentService" value="Diploma"><span>Diploma</span></label>
+                  <label class="service-option"><input type="checkbox" name="studentService" value="Certificate for Latin"><span>Certificate for Latin</span></label>
+                  <label class="service-option"><input type="checkbox" name="studentService" value="Other Certificate"><span>Other Certificate (Please Specify)</span></label>
+                </fieldset>
+              </div>
+            </fieldset>
+            <div id="studentOtherCertificateField" hidden>
+              <label for="studentOtherCertificate">Please specify the certificate</label>
+              <input type="text" id="studentOtherCertificate" maxlength="81" placeholder="Enter the certificate name">
+            </div>
+          </div>
+        </div>
+        <h3 class="slot-heading">Available time</h3>
+        <div id="studentTimeSlots" class="time-slots" aria-live="polite"></div>
+        <input type="hidden" id="studentSelectedDate">
+        <input type="hidden" id="studentSelectedTime">
+        <p id="bookingMessage" class="message" role="status" hidden></p>
+        <button id="studentBookButton" class="btn-confirm" type="submit" disabled>Confirm appointment</button>
+        <button id="cancelRescheduleButton" class="btn-cancel" type="button" hidden>Cancel reschedule</button>
+      </form>
+    </section>
+
+    <section id="trackingPanel" class="student-panel" hidden>
+      <h2>Track or manage an appointment</h2>
+      <p class="section-help">Enter the tracking code for an appointment booked with this account. Check the status again to see the latest progress.</p>
+      <form id="trackingForm">
+        <label for="trackingCode">Tracking code</label>
+        <input type="text" id="trackingCode" maxlength="32" placeholder="e.g. AB123456" autocomplete="off" required>
+        <button class="btn-confirm" type="submit">Check status</button>
+      </form>
+      <p id="trackingMessage" class="message" role="status" hidden></p>
+      <article id="trackingResult" class="tracking-result" hidden>
+        <h3>Appointment details</h3>
+        <dl>
+          <div><dt>Queue number</dt><dd id="resultQueueNumber"></dd></div>
+          <div><dt>Tracking code</dt><dd id="resultCode"></dd></div>
+          <div><dt>Service</dt><dd id="resultService"></dd></div>
+          <div><dt>Date and time</dt><dd id="resultDateTime"></dd></div>
+          <div><dt>Status</dt><dd id="resultStatus"></dd></div>
+        </dl>
+        <ol id="transactionProgress" class="transaction-progress" aria-label="Request progress" hidden>
+          <li data-stage="pending">Pending</li>
+          <li data-stage="processing">Processing</li>
+          <li data-stage="completed">Completed</li>
+        </ol>
+        <button id="rescheduleBookingButton" class="btn-confirm" type="button" hidden>Reschedule appointment</button>
+        <button id="cancelBookingButton" class="btn-cancel" type="button" hidden>Cancel appointment</button>
+      </article>
+    </section>
+
+    <p class="privacy-note">Keep your tracking code private. Do not share it publicly.</p>
+    </div>
+  </main>
+  <script src="password-toggle.js"></script>
+  <script src="student.js?v=2026-11-17-tracking-codes"></script>
+</body>
+</html>

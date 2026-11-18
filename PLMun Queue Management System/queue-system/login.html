@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login | PLMun Queue System</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="login-page">
+  <main class="login-container">
+    <img src="images/plmun-logo.jpg" alt="PLMun Logo" class="login-logo">
+    <h1>Pamantasan ng Lungsod ng Muntinlupa</h1>
+    <p class="subtitle">Queue Management System — Admin Sign In</p>
+    <form id="loginForm">
+      <label for="email">Admin email</label>
+      <input type="email" id="email" name="email" autocomplete="username" required>
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" autocomplete="current-password" required>
+      <button type="submit" id="loginButton">Sign in</button>
+    </form>
+    <p id="loginMessage" class="message" role="alert" hidden></p>
+    <nav class="login-links" aria-label="Other login and setup options">
+      <a class="setup-link" href="student.html">Student portal</a>
+      <a class="setup-link" href="setup-admin.php">Reset admin login</a>
+      <a class="setup-link" href="smtp-settings.php">Gmail notifications</a>
+    </nav>
+    <p class="footer-text">© 2026 PLMun. All Rights Reserved.</p>
+  </main>
+  <script src="password-toggle.js"></script>
+  <script>
+    const form = document.getElementById("loginForm");
+    const message = document.getElementById("loginMessage");
+    form.addEventListener("submit", async event => {
+      event.preventDefault();
+      const button = document.getElementById("loginButton");
+      button.disabled = true;
+      message.hidden = true;
+      try {
+        const response = await fetch("api.php?action=login", {
+          method: "POST",
+          credentials: "same-origin",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: document.getElementById("email").value.trim(),
+            password: document.getElementById("password").value
+          })
+        });
+        const responseText = await response.text();
+        if (!responseText.trim()) {
+          const phpUrl = new URL("api.php?action=login", window.location.href);
+          throw new Error(`HTTP ${response.status} from ${phpUrl.origin}. ` +
+            "A static server/Live Server appears to have handled the request instead of the PHP API. " +
+            "Open http://127.0.0.1:8000/login.html while the PHP server is running.");
+        }
+
+        let result;
+        try {
+          result = JSON.parse(responseText);
+        } catch {
+          throw new Error(
+            `The PHP API returned a non-JSON response (HTTP ${response.status}). ` +
+            "Make sure api.php is being served by PHP and that the project URL is correct."
+          );
+        }
+        if (!response.ok) throw new Error(result.error || "Sign-in failed.");
+        window.location.replace("index.html");
+      } catch (error) {
+        message.textContent = error instanceof TypeError
+          ? "Cannot reach the PHP API. Open the admin sign-in through the running PHP server at " +
+            "http://127.0.0.1:8000/login.html, not Live Server or a static preview."
+          : error.message;
+        message.classList.add("error");
+        message.hidden = false;
+      } finally {
+        button.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="PLMun Registrar queue and appointment management dashboard">
+  <title>PLMun Queue Management System</title>
+  <link rel="stylesheet" href="style.css?v=2026-11-17-tracking-codes">
+</head>
+<body>
+<div class="container">
+  <aside class="sidebar">
+    <img src="images/plmun-logo.jpg" alt="PLMun Logo">
+    <h3>PAMANTASAN NG LUNGSOD<br>NG MUNTINLUPA</h3>
+    <nav aria-label="Main navigation">
+      <ul>
+        <li data-section="dashboard" onclick="showSection('dashboard')">🏠 Dashboard</li>
+        <li data-section="appointment" onclick="showSection('appointment')">📅 Appointment Scheduling</li>
+        <li data-section="queue" onclick="showSection('queue')">👥 Queue Management</li>
+        <li data-section="analytics" onclick="showSection('analytics')">📊 Reports &amp; Analytics</li>
+        <li data-section="settings" onclick="showSection('settings')">⚙️ Settings</li>
+        <li onclick="logout()">🚪 Logout</li>
+      </ul>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <header class="top-header">
+      <h1 id="pageTitle">DASHBOARD</h1>
+      <div class="admin">
+        <img src="images/plmun-logo.jpg" alt="">
+        <span id="adminName">Admin</span>
+      </div>
+    </header>
+
+    <section id="dashboard">
+      <div class="banner">
+        <div class="banner-text">
+          <h2>MOBILE-BASED QUEUE MANAGEMENT SYSTEM</h2>
+          <p>UNIVERSITY REGISTRAR OFFICE<br>PAMANTASAN NG LUNGSOD NG MUNTINLUPA</p>
+        </div>
+      </div>
+
+      <div class="cards">
+        <article class="card">
+          <div class="card-icon green" aria-hidden="true">👥</div>
+          <div class="card-content"><h2>QUEUES TODAY</h2><p id="totalToday" class="metric">—</p></div>
+        </article>
+        <article class="card">
+          <div class="card-icon orange" aria-hidden="true">⏱</div>
+          <div class="card-content"><h2>WAITING</h2><p id="waitingToday" class="metric">—</p></div>
+        </article>
+        <article class="card">
+          <div class="card-icon blue" aria-hidden="true">📋</div>
+          <div class="card-content"><h2>COMPLETED TODAY</h2><p id="completedToday" class="metric">—</p></div>
+        </article>
+      </div>
+
+      <p id="dashboardMessage" class="message error" role="alert" hidden></p>
+      <section class="panel">
+        <h2>Today's Queue</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Queue</th><th>Time</th><th>Name</th><th>Service</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody id="queueRows"><tr><td colspan="6">Loading...</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Upcoming Appointments</h2>
+        <p class="section-help">Booked appointments for the next 90 days.</p>
+        <button type="button" class="btn-confirm" id="refreshDashboardButton">Refresh list</button>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Date</th><th>Queue</th><th>Time</th><th>Name</th><th>Service</th><th>Status</th></tr></thead>
+            <tbody id="upcomingRows"><tr><td colspan="6">Loading...</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+
+    <section id="appointment" class="panel" hidden>
+      <h2>📅 Appointment Scheduling</h2>
+      <p class="section-help">Choose a weekday (Monday through Friday), excluding Philippine holidays, to view available times. Up to 100 non-cancelled appointments are allowed per day.</p>
+      <div class="date-picker-wrapper">
+        <label for="appointmentDate">Appointment date</label>
+        <input type="date" id="appointmentDate" required>
+        <p id="appointmentDateStatus" class="schedule-status" role="status" aria-live="polite" hidden></p>
+      </div>
+      <div id="timeSlots" class="time-slots" aria-live="polite"></div>
+      <p id="bookingMessage" class="message" role="status" hidden></p>
+
+      <form id="bookingForm" hidden>
+        <h3>Book Appointment</h3>
+        <input type="hidden" id="selectedDate">
+        <input type="hidden" id="selectedTime">
+        <label for="studentName">Student name</label>
+        <input type="text" id="studentName" maxlength="120" autocomplete="name" required>
+        <label for="studentEmail">Email</label>
+        <input type="email" id="studentEmail" maxlength="254" autocomplete="email" required>
+        <label for="serviceType">Registrar service / document</label>
+        <input type="text" id="serviceType" maxlength="100" placeholder="e.g., document request or document pickup" required>
+        <div class="form-buttons">
+          <button type="submit" class="btn-confirm">Confirm Appointment</button>
+          <button type="button" onclick="closeForm()" class="btn-cancel">Cancel</button>
+        </div>
+      </form>
+    </section>
+
+    <section id="queue" class="panel" hidden>
+      <h2>👥 Queue Management</h2>
+      <p class="section-help">Mark the appointment as completed when the service is finished.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Queue</th><th>Time</th><th>Name</th><th>Service</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody id="queueRowsCopy"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="analytics" class="panel" hidden>
+      <h2>📊 Reports &amp; Analytics</h2>
+      <p class="section-help">Appointment summary for the past seven days, including today.</p>
+      <p id="reportsMessage" class="message error" role="alert" hidden></p>
+      <div class="cards report-cards">
+        <article class="card"><div class="card-content"><h2>TOTAL BOOKINGS</h2><p id="weeklyTotal" class="metric">—</p></div></article>
+        <article class="card"><div class="card-content"><h2>COMPLETED</h2><p id="weeklyCompleted" class="metric">—</p></div></article>
+        <article class="card"><div class="card-content"><h2>WAITING</h2><p id="weeklyWaiting" class="metric">—</p></div></article>
+        <article class="card"><div class="card-content"><h2>CANCELLED</h2><p id="weeklyCancelled" class="metric">—</p></div></article>
+        <article class="card"><div class="card-content"><h2>NO-SHOW</h2><p id="weeklyNoShow" class="metric">—</p></div></article>
+      </div>
+    </section>
+
+    <section id="settings" class="panel" hidden>
+      <h2>⚙️ Settings</h2>
+      <p class="section-help">Registrar office appointments are available Monday to Friday, from 9:00 AM to 12:00 PM and 1:00 PM to 4:00 PM, in 30-minute slots. Bookings can be made up to 90 days ahead.</p>
+      <p class="section-help">Admin credentials and database location are configured on the PHP server. Do not store passwords in this page.</p>
+      <h3>Tracking codes</h3>
+      <p class="section-help">Reissue existing codes as two uppercase letters and six digits (for example, AB123456). This replaces the old codes. Download the staff-only CSV and distribute new codes manually through an approved private channel; keep the file private.</p>
+      <p id="trackingCodeMigrationMessage" class="message" role="status" hidden></p>
+      <button id="reissueTrackingCodesButton" class="btn-confirm" type="button">Reissue existing codes</button>
+      <a class="tracking-code-export" href="api.php?action=export_tracking_codes">Download current tracking codes (CSV)</a>
+    </section>
+  </main>
+</div>
+<script src="script.js?v=2026-11-17-tracking-codes"></script>
+</body>
+</html>
