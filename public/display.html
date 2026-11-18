@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Now serving | Queue</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="display-page">
+  <header class="site-header"><a class="brand" href="/">Queue<span>.</span></a><nav><a href="/">Book a visit</a><a href="/staff">Staff</a></nav></header>
+  <main class="display-layout">
+    <div class="display-heading"><p class="eyebrow">SERVICE COUNTER · <span id="display-date"></span></p><h1>Now serving</h1></div>
+    <section class="display-feature">
+      <div class="display-label">PLEASE COME TO THE COUNTER</div>
+      <div id="called-ticket" class="called-ticket">—</div>
+      <div id="called-name" class="called-name">Waiting for the next customer</div>
+      <div id="called-time" class="called-time"></div>
+    </section>
+    <section class="display-bottom">
+      <div class="waiting-card"><p class="eyebrow">UP NEXT</p><div id="waiting-list" class="waiting-list"><span class="muted">No customers waiting</span></div></div>
+      <div class="waiting-count"><span id="waiting-count">0</span><p>customers<br>waiting</p></div>
+    </section>
+  </main>
+  <footer><span>Thanks for your patience.</span><span class="live-pill"><i></i> UPDATING LIVE</span></footer>
+  <script src="/display.js" defer></script>
+</body>
+</html>

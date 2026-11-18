@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Staff queue | Queue</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="site-header"><a class="brand" href="/">Queue<span>.</span></a><nav><a href="/">Book a visit</a><a href="/display">Queue display</a></nav></header>
+  <main class="dashboard">
+    <div class="dashboard-heading"><div><p class="eyebrow">SERVICE COUNTER</p><h1>Staff queue</h1><p id="staff-date" class="muted"></p></div><span class="live-pill"><i></i> TODAY</span></div>
+    <section class="card now-serving">
+      <div><p class="eyebrow">READY FOR THE NEXT CUSTOMER?</p><h2>Call the next appointment</h2><p class="muted">Customers are called in appointment-time order.</p></div>
+      <button id="call-next" class="button button-primary">Call next <span aria-hidden="true">→</span></button>
+      <p id="staff-message" class="form-message" role="status" aria-live="polite"></p>
+    </section>
+    <section class="card list-card">
+      <div class="list-heading"><div><p class="eyebrow">TODAY’S APPOINTMENTS</p><h2>Customer list</h2></div><span id="appointment-count" class="count-badge">0</span></div>
+      <div class="table-wrap"><table><thead><tr><th>TIME</th><th>QUEUE #</th><th>CUSTOMER</th><th>STATUS</th><th></th></tr></thead><tbody id="appointment-list"></tbody></table></div>
+      <p id="empty-state" class="empty-state" hidden>No appointments booked for today yet.</p>
+    </section>
+  </main>
+  <footer><span>Staff tools</span><a href="/display">Open public queue display <span aria-hidden="true">→</span></a></footer>
+  <script src="/staff.js" defer></script>
+</body>
+</html>

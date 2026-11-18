@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Book a visit | Queue</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/">Queue<span>.</span></a>
+    <nav><a href="/staff">Staff</a><a href="/display">Queue display</a></nav>
+  </header>
+  <main class="layout">
+    <section class="intro">
+      <p class="eyebrow">SERVICE COUNTER APPOINTMENTS</p>
+      <h1>Your visit,<br>on your time.</h1>
+      <p class="muted">Choose a time that works for you. We’ll email your queue number and appointment details.</p>
+      <div class="info-card"><span class="info-icon">i</span><p>Appointments are available every 30 minutes, Monday–Sunday, 9:00 AM–5:00 PM.</p></div>
+    </section>
+    <section class="card booking-card">
+      <div class="card-heading"><div><p class="eyebrow">PLAN YOUR VISIT</p><h2>Book an appointment</h2></div><span class="step">01 / 01</span></div>
+      <form id="booking-form">
+        <label for="name">Your name</label>
+        <input id="name" name="name" autocomplete="name" maxlength="100" placeholder="e.g. Alex Morgan" required>
+        <label for="email">Email address</label>
+        <input id="email" name="email" type="email" autocomplete="email" maxlength="254" placeholder="you@example.com" required>
+        <div class="form-row">
+          <div><label for="date">Choose a date</label><input id="date" name="date" type="date" required></div>
+          <div><label for="time">Available time</label><select id="time" name="time" required><option value="">Select a date first</option></select></div>
+        </div>
+        <p id="availability-note" class="field-note" aria-live="polite"></p>
+        <button id="submit-button" class="button button-primary" type="submit">Confirm appointment <span aria-hidden="true">→</span></button>
+        <p id="form-message" class="form-message" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+  </main>
+  <footer><span>Made for a smoother visit.</span><a href="/display">See today’s queue <span aria-hidden="true">→</span></a></footer>
+  <script src="/app.js" defer></script>
+</body>
+</html>
